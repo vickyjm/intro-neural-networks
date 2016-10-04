@@ -113,7 +113,7 @@ with open(sys.argv[1]) as fileInput:
 	fn = 0
 	aciertos = 0
 
-	rate = 0.01
+	rate = 0.1
 
 	index = kfold(300,5)
 

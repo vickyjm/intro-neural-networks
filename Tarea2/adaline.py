@@ -55,7 +55,7 @@ def plotClassifier(w,x,data):
 	plt.legend(loc="upper right")
 	plt.xlabel("Atributo 1")
 	plt.ylabel("Atributo 2")
-	plt.savefig("adaline_1.png",dpi=200)
+	#plt.savefig("adaline_1.png",dpi=200)
 	plt.show()
 	plt.pause(0.0001)
 	plt.draw()
@@ -128,7 +128,7 @@ with open(sys.argv[1]) as fileInput:
 	for line in fileInput:
 		data.append(line.split(" "))
 
-	shuffle(data)
+	#shuffle(data)
 
 	tp = 0
 	tn = 0
@@ -136,7 +136,7 @@ with open(sys.argv[1]) as fileInput:
 	fn = 0
 	aciertos = 0
 
-	rate = 0.1094
+	rate = 0.1
 
 	index = kfold(300,5)
 
@@ -162,7 +162,7 @@ with open(sys.argv[1]) as fileInput:
 
 		w, e = train(x,d,rate)
 
-		#plotClassifier(w,x,data)
+		plotClassifier(w,x,data)
 
 		epoch += e
 

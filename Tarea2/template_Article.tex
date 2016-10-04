@@ -16,7 +16,7 @@
 \section{Clasificadores Lineales}
 	En esta sección se presentarán los experimentos realizados para construir clasificadores lineales mediante aprendizaje con reforzamiento, un perceptrón de una capa y un adaline.\\
 	
-	Para la validación de todos los modelos se utilizará la técnica de validación cruzada. Además, se utilizará el porcentaje de datos bien clasificados como métrica de performance. Por último para asegurarnos que los modelos no están aprendiendo a clasificar basándose en el orden en que reciben los datos, en cada corrida los datos se desordenarán aleatoriamente.\\
+	Para medir la calidad de todos los modelos se utilizará la técnica de validación cruzada. Además, se utilizará el porcentaje de datos bien clasificados como métrica de \textit{performance}. Por último, para asegurarnos que los modelos no están aprendiendo a clasificar basándose en el orden en el que reciben los datos, en cada corrida estos se desordenarán aleatoriamente.\\
 	
 	Como los datos presentados en el archivo lincloud3 tienen solo dos dimensiones, pueden graficarse e identificar fácilmente si
 	son linealmente separables, para asegurarnos que los modelos utilizados a continuación serán capaces de clasificarlos. En la figura \ref{fig:datosOriginales} se tienen todos los datos identificados según la clase a la que pertenecen, y se puede observar que es posible trazar una línea entre ambas clases para separarlas.
@@ -29,9 +29,9 @@
 	\end{figure}
 	
 	\subsection{Aprendizaje con reforzamiento}
-		Para estas pruebas se inicializaron los pesos de las dos neuronas en valores aleatorios entre -0.5 y 0.5, y se usaron esos mismos valores en todas las corridas. Como condición de parada para el entrenamiento se tomó que no existiera error en la clasificación de los datos o que se superara un número máximo de épocas (1000 épocas).
+		Para estas pruebas se inicializaron los pesos de las dos neuronas en valores aleatorios entre -0.5 y 0.5, y se usaron esos mismos valores en todas las corridas. Como condición de parada para el entrenamiento se tomó que no existiera error en la clasificación de los datos o que se superara un número máximo de épocas (1000 épocas).\\
 		
-		En la Tabla \ref{tabla:accReforzamiento} se encuentran los resultados obtenidos de la ejecución de la validación cruzada 5-fold usando la red basada en aprendizaje con reforzamiento. 
+		En la Tabla \ref{tabla:accReforzamiento} se encuentran los resultados obtenidos de la ejecución de la validación cruzada 5-fold usando la red basada en aprendizaje con reforzamiento. Se observa que para las tres tasas de aprendizaje utilizadas se obtuvieron resultados parecidos, clasificando correctamente la mayoría de los datos. El número de épocas indicado es el promedio de épocas utilizadas durante las 5 iteraciones de la validación cruzada.
 		\begin{table}[H]
 		\begin{center}
 		\begin{tabular}{|l|l|l|l|l|}
@@ -70,7 +70,7 @@
 		\end{center}
 		\end{table}
 					
-		Esto puede apreciarse de forma más clara con las gráficas de la figura \ref{f:perceptron}, donde se muestra para cada tasa de aprendizaje utilizada el peor hiperplano generado durante la validación cruzada. Podemos observar que en las tres figuras el hiperplano está muy cerca de las dos fronteras, lo que puede originar errores de clasificación cuando esos datos no se encuentran dentro del conjunto de entrenamiento, como sucedió en las gráficas \ref{f:perceptron2} y \ref{f:perceptron3}. Con esto se puede concluir que el modelo no está generalizando lo suficiente.			
+		Esto puede apreciarse de forma más clara en las gráficas de la figura \ref{f:perceptron}, donde se muestra para cada tasa de aprendizaje utilizada el peor hiperplano generado de todas las iteraciones de la validación cruzada. Podemos observar que en las tres figuras el hiperplano está muy cerca de las dos fronteras, lo que puede originar errores de clasificación cuando esos datos no se encuentran dentro del conjunto de entrenamiento, como sucedió en las gráficas \ref{f:perceptron2} y \ref{f:perceptron3}. Con esto se puede concluir que el modelo tiene problemas para generalizar.			
 				
 		\begin{figure}[H]
 		 \centering
@@ -98,7 +98,7 @@
 		\hline
 		Total datos & $\alpha$ & \% Correctos & \% Incorrectos & Épocas\\
 		\hline \hline
-		300 & 0.1 & 99.3333 & 0.6667 & 5000\\ \hline
+		300 & 0.1 & 98 & 2 & 5000\\ \hline
 		300 & 0.01 & 100 & 0 & 5000\\ \hline
 		300 & 0.001 & 100 & 0 & 5000\\ \hline
 		\end{tabular}
@@ -107,12 +107,27 @@
 		\end{center}
 		\end{table}
 		
-		Se realizaron pruebas con otras tasas de aprendizaje pero se presentaron las más significativas. El valor más alto con el que se obtuvieron buenos resultados fue $\alpha=0.1093$. Con valores más altos 5000 épocas no son suficientes para que el Adaline genere porcentajes tan altos de aciertos.
+		Se realizaron pruebas con otras tasas de aprendizaje pero se presentaron solo las más significativas. El valor más alto con el que se obtuvieron buenos resultados fue $\alpha=0.1$. Con $\alpha$ más grandes, 5000 épocas no son suficientes para que el Adaline genere porcentajes tan altos de aciertos, debido a que se le dificulta la convergencia.
+		
+		\begin{figure}[H]
+		\centering
+		\subfloat[$\alpha=0.1$]{
+		\label{f:adaline1}
+		\includegraphics[width=0.3\textwidth]{adaline_1.png}}
+		\subfloat[$\alpha=0.01$]{
+		\label{f:adaline01}
+		\includegraphics[width=0.3\textwidth]{adaline_01.png}}
+		\subfloat[$\alpha=0.001$]{
+		\label{f:adaline001}
+		\includegraphics[width=0.3\textwidth]{adaline_001.png}}
+		\caption{Modelos de Adaline obtenidos en los tres experimentos}
+		\label{f:adaline}
+		\end{figure}
 	
 \section{Interpolador}
 	El algoritmo de Adaline puede ser utilizado para iterpolación de funciones si se calcula la salida de la siguiente forma $y = a + b_{1}x + b_{2}x^{2} + ... + b_{k}x^{k}$ siendo k el grado del polinomio que se usará para interpolar. Siendo 'a' el sesgo, y cada $b_{i}$ los $w_{i}$ comunes del Adaline.\\
 	
-	Sabiendo esto debemos conocer cómo se comportan los datos que tenemos en p3data para saber el grado del polinomio con el que aproximaremos la función que los originó. Con la figura \ref{fig:interpolador} se puede apreciar que los datos parecen ser originados por una función cúbica, aunque tengan un poco de ruido.
+	Sabiendo esto debemos conocer cómo se comportan los datos que tenemos en p3data para saber el grado del polinomio con el que aproximaremos la función que los originó. Con la figura \ref{fig:interpolador} se puede apreciar que los datos parecen ser originados por una función cúbica, aunque tengan un poco de ruido. Sin embargo, se realizarán pruebas con polinomios de grado 1, 2 y 3 con diferentes tasas de aprendizaje para determinar cuál verdaderamente aproxima mejor estos datos.
 	
 	\begin{figure}[H]
 	\centering
@@ -121,20 +136,36 @@
 	\label{fig:interpolador}
 	\end{figure}
 	
-	\begin{table}[H]
-	\begin{center}
-	\begin{tabular}{|l|l|l|l|l|}
-	\hline
-	Total datos & $\alpha$ & \% Correctos & \% Incorrectos & Épocas\\
-	\hline \hline
-	300 & 0.1 & 99.3333 & 0.6667 & 5000\\ \hline
-	300 & 0.01 & 100 & 0 & 5000\\ \hline
-	300 & 0.001 & 100 & 0 & 5000\\ \hline
-	\end{tabular}
-	\caption{Exactitud del Adaline como interpolador}
-	\label{tabla:accInter}
-	\end{center}
-	\end{table}
+	\begin{figure}[H]
+	\centering
+	\subfloat[Lineal]{
+	\label{f:lineal01}
+	\includegraphics[width=0.3\textwidth]{interpolado1_01.png}}
+	\subfloat[Cuadrática]{
+	\label{f:cuadratica01}
+	\includegraphics[width=0.3\textwidth]{interpolado2_01.png}}
+	\subfloat[Cúbica]{
+	\label{f:cubica01}
+	\includegraphics[width=0.3\textwidth]{interpolado3_01.png}}
+	\caption{Aproximaciones con $\alpha = 0.01$}
+	\label{f:interpolado01}
+	\end{figure}	
+	
+		\begin{figure}[H]
+		\centering
+		\subfloat[Lineal]{
+		\label{f:lineal001}
+		\includegraphics[width=0.3\textwidth]{interpolado1_001.png}}
+		\subfloat[Cuadrática]{
+		\label{f:cuadratica001}
+		\includegraphics[width=0.3\textwidth]{interpolado2_001.png}}
+		\subfloat[Cúbica]{
+		\label{f:cubica001}
+		\includegraphics[width=0.3\textwidth]{interpolado3_001.png}}
+		\caption{Aproximaciones con $\alpha = 0.001$}
+		\label{f:interpolado001}
+		\end{figure}	
+	
 
 \section{O-exclusivo}
 Se demostrará que las clases del O-exclusivo (XOR) no son linealmente separables por reducción al absurdo.\\
