@@ -1,0 +1,49 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{subfig}
+\usepackage{float} % para usar [H]
+%opening
+
+\begin{document}
+
+\noindent UNIVERSIDAD SIMÓN BOLÍVAR\\
+Departamento de Cómputo Científico\\
+CO-6612, Introducción a las redes neuronales\\
+Tarea 3: Perceptrón multicapas\\
+María Victoria Jorge\\
+11-10495
+
+\section{Regresión lineal}
+Para este ejercicio se utilizó el algoritmo de descenso de gradiente. Además, la capa oculta fue implementada con la función logística y la oculta con función de activación lineal.
+
+
+\section{Dependencia del peso en conejos australianos}
+\section{Máquina con k-expertos}
+Como se quiere encontrar un vector $\vec{w}$ con k elementos para ponderar la suma de los resultados de los expertos, se calculará la derivada del error cuadrático medio entre la respuesta deseada y la sumatoria propuesta, y luego igualando a cero se encontrarán los mínimos para este vector.
+
+\begin{align*}
+E(w) = \frac{(d - y)^{2}}{2} = \frac{(d - \sum_{k=1}^{K}w_{k}F_{k}(x) )^{2} }{2}
+\end{align*}
+
+Derivaremos respecto a un $w_{i}$ genérico, con $0 <= i <= k$.
+
+\begin{align*}
+(E(w))' &= (\frac{(d - \sum_{k=1}^{K}w_{k}F_{k}(x) )^{2} }{2})'\\
+	    &= \frac{2(d - \sum_{k=1}^{K}w_{k}F_{k}(x) ) }{2}(d - \sum_{k=1}^{K}w_{k}F_{k}(x))'	 \\
+	    &= (d - \sum_{k=1}^{K}w_{k}F_{k}(x) )(-\sum_{k=1}^{K}w_{k}F_{k}(x))' \\
+	    &= (d - \sum_{k=1}^{K}w_{k}F_{k}(x) )(-w_{i}F_{i}(x))'  \\
+	    &= -(d - \sum_{k=1}^{K}w_{k}F_{k}(x) )F_{i}(x)\\
+	    &= -(d - (\sum_{k=1}^{i-1}w_{k}F_{k}(x) + w_{i}F_{i}(x) + \sum_{k=i+1}^{K}w_{k}F_{k}(x) ) )F_{i}(x)
+\end{align*}
+
+Luego, igualando a cero y despejando $w_{i}$ nos queda,
+\begin{align*}
+w_{i} &= \frac{d - \sum_{k=1}^{i-1}w_{k}F_{k}(x) - \sum_{k=i+1}^{K}w_{k}F_{k}(x)}{F_{i}(x)}
+\end{align*}
+
+
+
+\end{document}

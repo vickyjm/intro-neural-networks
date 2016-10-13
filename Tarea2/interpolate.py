@@ -23,11 +23,10 @@ def plotClassifier(w,x,d):
 
 	for i in range(len(x)):
 		plt.plot(x[i],d[i],'bo')
-		output.append(w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3) + w[4]*pow(x[i],4))
+		output.append(w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3) + w[4]*pow(x[i],4) + w[5]*pow(x[i],5) + w[6]*pow(x[i],6) + w[7]*pow(x[i],7))
+		#output.append(w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3) + w[4]*pow(x[i],4) + w[5]*pow(x[i],5))
 		#output.append(w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3))
-		#output.append(w[0] + w[1]*x[i] + w[2]*pow(x[i],2))
-		#output.append(w[0] + w[1]*x[i])
-
+	plt.ylim([-6,12])
 	plt.plot(x,output,"g-")
 	plt.show()
 	plt.pause(0.0001)
@@ -64,20 +63,18 @@ def updateWeights(oldW, delta, rate, features):
 	return output
 
 def train(x,d,rate):
-	w = [0.34 ,  0.268,  0.184,  0.415, 0.34 ]
 	#w = [0.34 ,  0.268,  0.184,  0.415] Cubica
-	#w = [0.34 ,  0.268,  0.184] Cuadrática
-	#w = [0.34 ,  0.268] Lineal
+	#w = [-0.445, -0.223, -0.125,  0.243, -0.006, -0.064] #Grado 5
+	w = [-0.3  ,  0.133,  0.049, -0.246, -0.221, -0.423,  0.347,  0.269] #Grado 7
 	epoch = 0
 	grado = 3
 
 	while (epoch < 5000):
 		error = 0
 		for i in range(0,len(x)):
-			output = w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3) + w[4]*pow(x[i],4)
+			output = w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3) + w[4]*pow(x[i],4) + w[5]*pow(x[i],5) + w[6]*pow(x[i],6) + w[7]*pow(x[i],7)
+			#output = w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3) + w[4]*pow(x[i],4) + w[5]*pow(x[i],5)
 			#output = w[0] + w[1]*x[i] + w[2]*pow(x[i],2) + w[3]*pow(x[i],3)
-			#output = w[0] + w[1]*x[i] + w[2]*pow(x[i],2)
-			#output = w[0] + w[1]*x[i]
 			delta = d[i] - output
 			error = error + delta*delta
 
@@ -102,7 +99,7 @@ with open(sys.argv[1]) as fileInput:
 		x.append(float(tmp[0]))
 		d.append(float(tmp[1]))
 
-	rate = 0.001
+	rate = 0.01
 	w, e = train(x,d,rate)
 
 	plotClassifier(w,x,d)
