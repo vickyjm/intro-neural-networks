@@ -136,22 +136,27 @@ if __name__ == '__main__':
 	#trainData = normalizar(trainData,71,2)
 	#testData = 
 
-	nHidden = 4
+	nHidden = 1
 
 	initW,b0,hidW,b1,errArr,iterArr = backPropagation(trainData,0.01,1,1,nHidden,700)
 	plt.title("ECM datos entrenamiento. n = "+str(nHidden))
 	plt.plot(iterArr,errArr)
 	plt.ylabel('Error')
 	plt.xlabel('Iteraciones')
-	plt.show()
+	plt.savefig("n1_train.png",dpi=200)
+	#plt.show()
 	
 	# aciertos = 0
 	# error = 0
-	# errorIter = []
+	errorIter = []
 
-	# for p in range(0,len(testData)):
-	# 	oHidden = calcularO(initW,testData[p],b0,1,nHidden)
-	# 	oOut = calcularOLineal(hidW,oHidden,b1,nHidden,1)
+	for p in range(0,len(testData)):
+		oHidden = calcularO(initW,testData[p],b0,1,nHidden)
+		oOut = calcularOLineal(hidW,oHidden,b1,nHidden,1)
+		
+		#plt.plot(testData[p][0],testData[p][1],'r^')
+		#plt.plot(testData[p][0],oOut[0],'bo')
+	#plt.show()
 		
 	# 	error = pow(testData[p][1]-oOut[0],2)
 	# 	errorIter.append(error/2)
