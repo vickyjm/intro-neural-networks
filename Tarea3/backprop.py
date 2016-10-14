@@ -134,30 +134,50 @@ if __name__ == '__main__':
 	testData = readFile(testFile)
 
 	#trainData = normalizar(trainData,71,2)
-	#testData = 
+	#testData = normalizar(testData,1000,2)
 
-	nHidden = 1
+	#n = [1,2,3]
+	#n = [4,6,8]
+	#n = [12,20,40]
+	n = [1]
 
-	initW,b0,hidW,b1,errArr,iterArr = backPropagation(trainData,0.01,1,1,nHidden,700)
-	plt.title("ECM datos entrenamiento. n = "+str(nHidden))
-	plt.plot(iterArr,errArr)
-	plt.ylabel('Error')
-	plt.xlabel('Iteraciones')
-	plt.savefig("n1_train.png",dpi=200)
-	#plt.show()
-	
-	# aciertos = 0
-	# error = 0
-	errorIter = []
+	#nHidden = 1
 
-	for p in range(0,len(testData)):
-		oHidden = calcularO(initW,testData[p],b0,1,nHidden)
-		oOut = calcularOLineal(hidW,oHidden,b1,nHidden,1)
+	#plt.title("ECM datos entrenamiento. n = 1,2,3")
+	for nHidden in n:
+		print("n="+str(nHidden))
+		initW,b0,hidW,b1,errArr,iterArr = backPropagation(trainData,0.01,1,1,nHidden,700)
+		#plt.plot(iterArr,errArr, label="n="+str(nHidden))
+		#plt.legend(loc="upper right")
+		#plt.ylabel('Error')
+		#plt.xlabel('Iteraciones')
+
+		#errorIter = []
+		printLabel = True
+		aciertos = 0
+		error = 0
+		plt.title("Aproximación para n = "+str(nHidden))
 		
-		#plt.plot(testData[p][0],testData[p][1],'r^')
-		#plt.plot(testData[p][0],oOut[0],'bo')
-	#plt.show()
-		
-	# 	error = pow(testData[p][1]-oOut[0],2)
-	# 	errorIter.append(error/2)
+		for p in range(0,len(testData)):
+			oHidden = calcularO(initW,testData[p],b0,1,nHidden)
+			oOut = calcularOLineal(hidW,oHidden,b1,nHidden,1)
+
+			if printLabel:
+				plt.plot(testData[p][0],testData[p][1],'r^',label="Real")
+				plt.plot(testData[p][0],oOut[0],'bo',label="Aprox")
+				printLabel = False
+			else:
+				plt.plot(testData[p][0],testData[p][1],'r^')
+				plt.plot(testData[p][0],oOut[0],'bo')
+
+			if (testData[p][1] == oOut[0]):
+				aciertos += 1
+			#plt.show()
 			
+			error += pow(testData[p][1]-oOut[0],2)
+			#errorIter.append(error/2)
+		plt.legend(loc="upper right")
+		plt.savefig("n_"+str(nHidden)+"_prueba.png",dpi=200)
+		plt.show()
+		print("Aciertos: ",aciertos)
+		print("ECM: ",error/len(testData))

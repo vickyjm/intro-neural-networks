@@ -1,0 +1,27 @@
+n=1
+Aciertos:  0
+ECM:  0.986180860162
+n=2
+Aciertos:  0
+ECM:  0.795813168866
+n=3
+Aciertos:  0
+ECM:  0.476378858796
+n=4
+Aciertos:  0
+ECM:  0.492357117738
+n=6
+Aciertos:  0
+ECM:  0.505246823906
+n=8
+Aciertos:  0
+ECM:  0.575151374191
+n=12
+Aciertos:  0
+ECM:  0.508278815801
+n=20
+Aciertos:  0
+ECM:  0.539333113244
+n=40
+Aciertos:  0
+ECM:  0.561978821798
