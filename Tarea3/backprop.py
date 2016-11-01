@@ -3,6 +3,7 @@ import random
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import cross_validation
 from math import e
 
 def readFile(file):
@@ -19,7 +20,7 @@ def calcularO(w,x,w0,capa1,capa2):
 		net = w0[i] # w0*x0 y x0 siempre es 1
 		for j in range(capa1):     
 			net += w[j][i]*x[j]
-		output.append(1.0/(1.0 + np.exp(-net)))
+		output.append(1.0/(1.0 + np.exp(-net*15)))
 		
 	return output
 
@@ -128,56 +129,71 @@ def backPropagation(examples,rate,nin,nout,nhidden,max_iter):
 
 if __name__ == '__main__':
 	trainingFile = open(sys.argv[1],'r')
-	testFile = open(sys.argv[2],'r')
+	#testFile = open(sys.argv[2],'r')
 
-	trainData = readFile(trainingFile)
-	testData = readFile(testFile)
+	datos = readFile(trainingFile)
+	#testData = readFile(testFile)
+	datos = normalizar(datos,71,2)
 
-	#trainData = normalizar(trainData,71,2)
+	trainData, testData = cross_validation.train_test_split(datos,test_size=0.2)
+
 	#testData = normalizar(testData,1000,2)
 
 	#n = [1,2,3]
 	#n = [4,6,8]
 	#n = [12,20,40]
-	n = [1]
+	#n = [2,4,6,12,20]
+	#lr = [0.1,0.01,0.001]
+	n = [4]
+	lr = [0.1]
 
-	#nHidden = 1
-
-	#plt.title("ECM datos entrenamiento. n = 1,2,3")
-	for nHidden in n:
-		print("n="+str(nHidden))
-		initW,b0,hidW,b1,errArr,iterArr = backPropagation(trainData,0.01,1,1,nHidden,700)
-		#plt.plot(iterArr,errArr, label="n="+str(nHidden))
-		#plt.legend(loc="upper right")
-		#plt.ylabel('Error')
-		#plt.xlabel('Iteraciones')
-
-		#errorIter = []
-		printLabel = True
-		aciertos = 0
-		error = 0
-		plt.title("Aproximación para n = "+str(nHidden))
-		
-		for p in range(0,len(testData)):
-			oHidden = calcularO(initW,testData[p],b0,1,nHidden)
-			oOut = calcularOLineal(hidW,oHidden,b1,nHidden,1)
-
-			if printLabel:
-				plt.plot(testData[p][0],testData[p][1],'r^',label="Real")
-				plt.plot(testData[p][0],oOut[0],'bo',label="Aprox")
-				printLabel = False
-			else:
-				plt.plot(testData[p][0],testData[p][1],'r^')
-				plt.plot(testData[p][0],oOut[0],'bo')
-
-			if (testData[p][1] == oOut[0]):
-				aciertos += 1
+	for alpha in lr:
+		print("lr="+str(alpha))
+		for nHidden in n:
+			print("n="+str(nHidden))
+			initW,b0,hidW,b1,errArr,iterArr = backPropagation(trainData,alpha,1,1,nHidden,1000)
+			#plt.title("ECM datos entrenamiento. n = 4")
+			#plt.plot(iterArr,errArr, label="n="+str(nHidden))
+			#plt.legend(loc="upper right")
+			#plt.ylabel('Error')
+			#plt.xlabel('Iteraciones')
+			#plt.savefig("n0-1_4_train.png",dpi=200)
 			#plt.show()
 			
-			error += pow(testData[p][1]-oOut[0],2)
-			#errorIter.append(error/2)
-		plt.legend(loc="upper right")
-		plt.savefig("n_"+str(nHidden)+"_prueba.png",dpi=200)
-		plt.show()
-		print("Aciertos: ",aciertos)
-		print("ECM: ",error/len(testData))
+			printLabel = True
+			error = 0
+			print("Error training:",errArr[499],min(errArr))
+			plt.title("Aproximación para n = "+str(nHidden))
+			salida = []
+			x = []
+			aciertos = 0
+			
+			for p in range(0,len(datos)):
+				oHidden = calcularO(initW,datos[p],b0,1,nHidden)
+				oOut = calcularOLineal(hidW,oHidden,b1,nHidden,1)
+
+				#if (testData[p][1] == oOut[0]):
+					#aciertos += 1
+						
+				error += pow(datos[p][1]-oOut[0],2)
+				salida.append(oOut[0])
+				x.append(datos[p][0])
+
+				if printLabel:
+					#plt.plot(testData[p][0],testData[p][1],'r^',label="Real")
+					#plt.plot(testData[p][0],oOut[0],'bo',label="Aprox")
+					plt.plot(datos[p][0],datos[p][1],'r^',label="Real")
+					printLabel = False
+				else:
+					#plt.plot(testData[p][0],testData[p][1],'r^')
+					#plt.plot(testData[p][0],oOut[0],'bo')
+					plt.plot(datos[p][0],datos[p][1],'r^')
+
+
+			print("Aciertos: ",aciertos)
+			print("Error prueba: ",error/2)
+
+			plt.plot(x,salida,"bo",label="Aprox")
+			plt.legend(loc="lower right")
+			plt.savefig("n0-1_4_prueba.png",dpi=200)
+			plt.show()
